@@ -1,8 +1,9 @@
 import resolve from '@rollup/plugin-node-resolve';
-import babel from "@rollup/plugin-babel";
+import { babel } from "@rollup/plugin-babel";
 import filesize from 'rollup-plugin-filesize';
 
-export default {
+/** @type { import("rollup").RollupOptions } */
+const rollupConfig = {
   plugins: [
     resolve({
       extensions: ['.ts', '.tsx']
@@ -22,3 +23,4 @@ export default {
     { file: 'dist/build/index.js', format: 'es' }
   ]
 };
+export default rollupConfig

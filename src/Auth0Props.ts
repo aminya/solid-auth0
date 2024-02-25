@@ -47,5 +47,5 @@ export type Auth0Props = {
   /**
    * Optional function to be called after a successful login.
    */
-  onLogin?: (appState: any, loginRedirectUri: string) => void;
+  onLogin?: (appState: unknown, loginRedirectUri: string) => void;
 };

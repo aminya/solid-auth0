@@ -29,7 +29,7 @@ const getUrl = () => {
  * @param {any} _appState - Unused.
  * @param {string} loginRedirectUri - The URI to redirect to after logging in.
  */
-const onLogin = (_appState: any, loginRedirectUri: string) => {
+const onLogin = (_appState: unknown, loginRedirectUri: string) => {
   window.history.replaceState(undefined, '', loginRedirectUri);
 }
 
@@ -38,15 +38,15 @@ const onLogin = (_appState: any, loginRedirectUri: string) => {
  * @param props The props for the component.
  * @returns The rendered component.
  */
-export const Auth0 = (props: Auth0Props): JSX.Element => {
+export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
   // Merge props with defaults
-  props = mergeProps(
+  const props = mergeProps(
     {},
     {
       onLogin,
       getUrl
     },
-    props
+    propsIn
   );
 
   // Create the Auth0 client promise that resolves to an instance
