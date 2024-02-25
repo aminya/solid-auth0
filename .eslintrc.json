@@ -1,4 +1,13 @@
 {
-  "extends": "eslint-config-atomic",
-  "ignorePatterns": ["dist/", "node_modules/"]
+  "ignorePatterns": [
+    "dist/",
+    "node_modules/"
+  ],
+  "plugins": [
+    "solid"
+  ],
+  "extends": [
+    "eslint-config-atomic",
+    "plugin:solid/recommended"
+  ]
 }
