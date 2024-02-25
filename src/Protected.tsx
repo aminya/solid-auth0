@@ -31,7 +31,9 @@ export const Protected = (props: ProtectedRouteProps): JSX.Element => {
 
     (async (): Promise<void> => {
       await auth0?.loginWithRedirect(opts);
-    })();
+    })().catch((err) => {
+      throw new Error(`Error logging in: ${err}`);
+    });
   });
 
   return auth0?.isAuthenticated() === true ? props.children : onRedirecting;

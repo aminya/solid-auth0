@@ -91,7 +91,7 @@ export const Auth0 = (props: Auth0Props): JSX.Element => {
         user,
         loginWithRedirect: async (options?: RedirectLoginOptions) => {
           const client = await auth0ClientPromise;
-          client.loginWithRedirect({
+          await client.loginWithRedirect({
             authorizationParams: {
               redirect_uri: props.loginRedirectUri,
               audience: props.audience,
@@ -102,7 +102,7 @@ export const Auth0 = (props: Auth0Props): JSX.Element => {
         },
         logout: async (options?: LogoutOptions) => {
           const client = await auth0ClientPromise;
-          client.logout({
+          await client.logout({
             logoutParams: {
               returnTo: props.logoutRedirectUri,
               ...options
@@ -111,7 +111,7 @@ export const Auth0 = (props: Auth0Props): JSX.Element => {
         },
         getToken: async () => {
           const client = await auth0ClientPromise;
-          return await client.getTokenSilently();
+          return client.getTokenSilently();
         }
       }}
     >
