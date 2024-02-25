@@ -21,6 +21,8 @@
   },
   "main": "dist/build/index.cjs.js",
   "types": "dist/index.d.ts",
+  "source": "src/index.tsx",
+  "module": "dist/build/index.js",
   "scripts": {
     "build": "tsc && rollup -c",
     "prebuild": "rimraf dist && npm run format && npm run lint",
@@ -32,7 +34,8 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.4",
