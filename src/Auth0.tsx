@@ -4,9 +4,7 @@ import { Auth0Props } from "./Auth0Props";
 import { Auth0State } from "./Auth0State";
 
 export const Auth0Context = createContext<Auth0State>();
-export const useAuth0 = <TUser extends User = User>(
-  context = Auth0Context
-): Auth0State<User> => useContext(context) as Auth0State<User>;
+export const useAuth0 = (context = Auth0Context) => useContext(context);
 
 /**
  * Checks if a URL is a redirect callback from Auth0 by checking for the presence of 'code' and 'state' parameters in the URL query.
@@ -89,7 +87,7 @@ export const Auth0 = (props: Auth0Props): JSX.Element => {
       value={{
         auth0Client,
         isLoading: () => isAuthenticated() === undefined,
-        isAuthenticated: () => !!isAuthenticated(),
+        isAuthenticated: () => Boolean(isAuthenticated()),
         user,
         loginWithRedirect: async (options?: RedirectLoginOptions) => {
           const client = await auth0ClientPromise;
