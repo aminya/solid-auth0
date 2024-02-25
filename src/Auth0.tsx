@@ -13,7 +13,7 @@ export const useAuth0 = (context = Auth0Context) => useContext(context);
  */
 const isRedirect = (url: string) => {
   const [, query] = url.split('?');
-  return query && query.includes('code=') && query.includes('state=');
+  return typeof query === "string" && query.includes('code=') && query.includes('state=');
 }
 
 /**

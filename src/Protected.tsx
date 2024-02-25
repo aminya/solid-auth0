@@ -13,18 +13,18 @@ const defaultReturnTo = (): string => `${window.location.pathname}${window.locat
  */
 export const Protected = (props: ProtectedRouteProps): JSX.Element => {
   const auth0 = useAuth0();
-  const onRedirecting = props.onRedirecting || defaultOnRedirecting;
-  const returnTo = props.returnTo || defaultReturnTo;
+  const onRedirecting = props.onRedirecting ?? defaultOnRedirecting;
+  const returnTo = props.returnTo ?? defaultReturnTo;
 
   createEffect(() => {
-    if (auth0?.isLoading() || auth0?.isAuthenticated()) {
+    if (auth0?.isLoading() === true || auth0?.isAuthenticated() === true) {
       return;
     }
 
     const opts = {
       ...props.loginOptions,
       appState: {
-        ...(props.loginOptions && props.loginOptions.appState),
+        ...(props.loginOptions?.appState),
         returnTo: typeof returnTo === 'function' ? returnTo() : returnTo,
       },
     };
@@ -32,8 +32,7 @@ export const Protected = (props: ProtectedRouteProps): JSX.Element => {
     (async (): Promise<void> => {
       await auth0?.loginWithRedirect(opts);
     })();
-
   });
 
-  return auth0?.isAuthenticated() ? props.children : onRedirecting;
+  return auth0?.isAuthenticated() === true ? props.children : onRedirecting;
 }
