@@ -1,6 +1,6 @@
-import { JSX, createEffect, mergeProps } from "solid-js";
-import { useAuth0 } from "./Auth0";
-import { ProtectedRouteProps } from "./ProtectedRouteProps";
+import { JSX, createEffect, mergeProps } from 'solid-js';
+import { useAuth0 } from './Auth0';
+import { ProtectedRouteProps } from './ProtectedRouteProps';
 
 const defaultOnRedirecting: JSX.Element = <>Loading...</>;
 
@@ -17,9 +17,9 @@ export const Protected = (propsIn: ProtectedRouteProps): JSX.Element => {
   const props = mergeProps(
     {
       defaultOnRedirecting,
-      defaultReturnTo
+      defaultReturnTo,
     },
-    propsIn
+    propsIn,
   );
 
   createEffect(() => {
@@ -30,7 +30,7 @@ export const Protected = (propsIn: ProtectedRouteProps): JSX.Element => {
     const opts = {
       ...props.loginOptions,
       appState: {
-        ...(props.loginOptions?.appState),
+        ...props.loginOptions?.appState,
         returnTo: typeof props.returnTo === 'function' ? props.returnTo() : props.returnTo,
       },
     };
@@ -42,7 +42,5 @@ export const Protected = (propsIn: ProtectedRouteProps): JSX.Element => {
     });
   });
 
-  return (
-    <>{auth0?.isAuthenticated() === true ? props.children : props.onRedirecting}</>
-  )
+  return <>{auth0?.isAuthenticated() === true ? props.children : props.onRedirecting}</>;
 };

@@ -1,7 +1,7 @@
-import { LogoutOptions, RedirectLoginOptions, User, createAuth0Client } from "@auth0/auth0-spa-js"
-import { JSX, createContext, createResource, createSignal, mergeProps, useContext } from "solid-js";
-import { Auth0Props } from "./Auth0Props";
-import { Auth0State } from "./Auth0State";
+import { LogoutOptions, RedirectLoginOptions, User, createAuth0Client } from '@auth0/auth0-spa-js';
+import { JSX, createContext, createResource, createSignal, mergeProps, useContext } from 'solid-js';
+import { Auth0Props } from './Auth0Props';
+import { Auth0State } from './Auth0State';
 
 export const Auth0Context = createContext<Auth0State>();
 export const useAuth0 = (context = Auth0Context) => useContext(context);
@@ -13,8 +13,8 @@ export const useAuth0 = (context = Auth0Context) => useContext(context);
  */
 const isRedirect = (url: string) => {
   const [, query] = url.split('?');
-  return typeof query === "string" && query.includes('code=') && query.includes('state=');
-}
+  return typeof query === 'string' && query.includes('code=') && query.includes('state=');
+};
 
 /**
  * Returns the current URL.
@@ -22,7 +22,7 @@ const isRedirect = (url: string) => {
  */
 const getUrl = () => {
   return window.location.href;
-}
+};
 
 /**
  * Updates the URL in the browser history to remove any query parameters after an Auth0 login redirect.
@@ -31,7 +31,7 @@ const getUrl = () => {
  */
 const onLogin = (_appState: unknown, loginRedirectUri: string) => {
   window.history.replaceState(undefined, '', loginRedirectUri);
-}
+};
 
 /**
  * Component that provides authentication using Auth0.
@@ -44,9 +44,9 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
     {},
     {
       onLogin,
-      getUrl
+      getUrl,
     },
-    propsIn
+    propsIn,
   );
 
   // Create the Auth0 client promise that resolves to an instance
@@ -96,26 +96,26 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
               redirect_uri: props.loginRedirectUri,
               audience: props.audience,
               scope: props.scope,
-              ...options
-            }
-          })
+              ...options,
+            },
+          });
         },
         logout: async (options?: LogoutOptions) => {
           const client = await auth0ClientPromise;
           await client.logout({
             logoutParams: {
               returnTo: props.logoutRedirectUri,
-              ...options
-            }
-          })
+              ...options,
+            },
+          });
         },
         getToken: async () => {
           const client = await auth0ClientPromise;
           return client.getTokenSilently();
-        }
+        },
       }}
     >
       {props.children}
     </Auth0Context.Provider>
-  )
-}
+  );
+};

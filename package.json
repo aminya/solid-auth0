@@ -22,10 +22,10 @@
   "main": "dist/build/index.cjs.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc&&rollup -c",
+    "build": "tsc && rollup -c",
     "prebuild": "rimraf dist && npm run format && npm run lint",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint . --fix --cache --cache-location ./node_modules/.cache/eslint/ **/*.{ts,tsx,js,jsx,cjs,mjs,json,yaml} --no-error-on-unmatched-pattern",
+    "format": "prettier --cache --cache-location ./node_modules/.cache/prettier.json --write .",
+    "lint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint/ **/*.{ts,tsx,js,jsx,cjs,mjs,json,yaml} --no-error-on-unmatched-pattern",
     "prepare": "npm run build",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
