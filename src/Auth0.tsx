@@ -88,7 +88,7 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
     <Auth0Context.Provider
       value={{
         auth0Client,
-        isLoading: () => isAuthenticated() === undefined,
+        isLoading: () => auth0Client.loading || isAuthenticated() === undefined,
         isAuthenticated: () => Boolean(isAuthenticated()),
         user,
         loginWithRedirect: async (options?: RedirectLoginOptions) => {
