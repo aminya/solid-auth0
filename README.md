@@ -54,10 +54,39 @@ const App: Component = () => {
 ```tsx
 import { Auth0State, useAuth0 } from '@afroze9/solid-auth0';
 
-const TopNav: Component = () => {
-  const auth0: Auth0State<User> | undefined = useAuth0();
+const AppComponent: Component = () => {
+  const auth0 = useAuth0();
 
-  return <div>{auth0?.isAuthenticated() ? <div>Logout</div> : <div>Login</div>}</div>;
+  return (
+    <>
+      <div>
+        <Switch
+          fallback={
+            <button id="login" onClick={() => auth0?.loginWithRedirect()}>
+              Login
+            </button>
+          }
+        >
+          <Match when={auth0 === undefined || auth0.isLoading()}>
+            <p>Loading...</p>
+          </Match>
+          <Match when={auth0?.user?.()}>
+            {(user) => (
+              <>
+                <img src={user().picture} alt="user profile picture" />
+                <p>
+                  Logged in as {user().name ?? ''} ({user().email ?? ''})
+                </p>
+                <button id="logout" onClick={() => auth0!.logout()}>
+                  Logout
+                </button>
+              </>
+            )}
+          </Match>
+        </Switch>
+      </div>
+    </>
+  );
 };
 ```
 
