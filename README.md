@@ -38,10 +38,10 @@ const App: Component = () => {
     <Auth0
       domain="_auth0_domain_"
       clientId="_client_id_"
-      audience="_api_audience_"
+      audience="_optional_api_audience_"
       logoutRedirectUri={`${window.location.origin}/`}
       loginRedirectUri={`${window.location.origin}/`}
-      scope="_scopes_"
+      scope="_optional_scopes_"
     >
       <AppComponent />
     </Auth0>

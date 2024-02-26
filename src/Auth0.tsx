@@ -27,10 +27,12 @@ const getUrl = () => {
 /**
  * Updates the URL in the browser history to remove any query parameters after an Auth0 login redirect.
  * @param {any} _appState - Unused.
- * @param {string} loginRedirectUri - The URI to redirect to after logging in.
+ * @param {string | undefined} loginRedirectUri - The URI to redirect to after logging in.
  */
-const onLogin = (_appState: unknown, loginRedirectUri: string) => {
-  window.history.replaceState(undefined, '', loginRedirectUri);
+const onLogin = (_appState: unknown, loginRedirectUri?: string) => {
+  if (loginRedirectUri !== undefined) {
+    window.history.replaceState(undefined, '', loginRedirectUri);
+  }
 };
 
 /**
@@ -67,11 +69,11 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
   // Create a resource for the Auth0 client instance
   const [auth0Client] = createResource(async () => {
     const client = await auth0ClientPromise;
-    const url = props.getUrl!();
+    const url = props.getUrl();
 
     if (isRedirect(url)) {
       const result = await client.handleRedirectCallback(url);
-      props.onLogin!(result.appState, props.loginRedirectUri);
+      props.onLogin(result.appState, props.loginRedirectUri);
     }
 
     if (setIsAuthenticated(await client.isAuthenticated())) {
