@@ -1,4 +1,4 @@
-import { LogoutOptions, RedirectLoginOptions, User, createAuth0Client } from '@auth0/auth0-spa-js';
+import { AuthorizationParams, LogoutOptions, RedirectLoginOptions, User, createAuth0Client } from '@auth0/auth0-spa-js';
 import { JSX, createContext, createResource, createSignal, mergeProps, useContext } from 'solid-js';
 import { Auth0Props } from './Auth0Props';
 import { Auth0State } from './Auth0State';
@@ -47,20 +47,32 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
     {
       onLogin,
       getUrl,
+      loginRedirectUri: window.location.origin,
     },
     propsIn,
   );
 
-  // Create the Auth0 client promise that resolves to an instance
-  const auth0ClientPromise = createAuth0Client({
-    domain: props.domain,
-    clientId: props.clientId,
-    authorizationParams: {
-      audience: props.audience,
-      redirect_uri: props.loginRedirectUri,
-      scope: props.scope,
-    },
-  });
+  // Create reactive authorization parameters while avoiding existence of undefined properties
+  const authorizationParams = () => {
+    const params: AuthorizationParams = {};
+    if (props.audience !== undefined) {
+      params.audience = props.audience;
+    }
+    if (props.scope !== undefined) {
+      params.scope = props.scope;
+    }
+    params.redirect_uri = props.loginRedirectUri;
+    return params;
+  };
+
+  // Create the reactive Auth0 client promise that resolves to an instance
+  const auth0ClientPromise = () => {
+    return createAuth0Client({
+      domain: props.domain,
+      clientId: props.clientId,
+      authorizationParams: authorizationParams(),
+    });
+  };
 
   // Create signals for the user and authentication status
   const [isAuthenticated, setIsAuthenticated] = createSignal<boolean | undefined>(undefined);
@@ -68,7 +80,7 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
 
   // Create a resource for the Auth0 client instance
   const [auth0Client] = createResource(async () => {
-    const client = await auth0ClientPromise;
+    const client = await auth0ClientPromise();
     const url = props.getUrl();
 
     if (isRedirect(url)) {
@@ -92,18 +104,16 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
         isAuthenticated: () => Boolean(isAuthenticated()),
         user,
         loginWithRedirect: async (options?: RedirectLoginOptions) => {
-          const client = await auth0ClientPromise;
+          const client = await auth0ClientPromise();
           await client.loginWithRedirect({
             authorizationParams: {
-              redirect_uri: props.loginRedirectUri,
-              audience: props.audience,
-              scope: props.scope,
+              ...authorizationParams(),
               ...options,
             },
           });
         },
         logout: async (options?: LogoutOptions) => {
-          const client = await auth0ClientPromise;
+          const client = await auth0ClientPromise();
           await client.logout({
             logoutParams: {
               returnTo: props.logoutRedirectUri,
@@ -112,7 +122,7 @@ export const Auth0 = (propsIn: Auth0Props): JSX.Element => {
           });
         },
         getToken: async () => {
-          const client = await auth0ClientPromise;
+          const client = await auth0ClientPromise();
           return client.getTokenSilently();
         },
       }}
